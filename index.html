@@ -5,25 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>guon220 | Portfolio</title>
 
-  <meta name="description" content="guon220 — веб-разработчик. Портфолио, контакты, проекты.">
+  <meta name="google-site-verification" content="ru2rcbnG3Aq7RJ8PHkpm2X3zmTkwpDYPLAW3tv3jeQ0" />
+  <meta name="description" content="guon220 — веб-разработчик, портфолио, контакты, проекты">
   <meta property="og:title" content="guon220 | Portfolio">
-  <meta property="og:description" content="Веб-разработчик. Смотри проекты и выходи на связь.">
+  <meta property="og:description" content="веб-разработчик, смотри проекты и выходи на связь">
   <meta property="og:image" content="avatar.jpg">
   <meta property="og:url" content="">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="guon220 | Portfolio">
-  <meta name="twitter:description" content="Веб-разработчик. Смотри проекты и выходи на связь.">
+  <meta name="twitter:description" content="веб-разработчик, смотри проекты и выходи на связь.">
   <meta name="twitter:image" content="avatar.jpg">
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23a855f7'/><text y='.9em' font-size='72' x='50%' text-anchor='middle' dominant-baseline='auto' dy='0.1em'>g</text></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Подключение шрифта Geist как на rooni.dev -->
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <style>
     :root {
-      --bg-base: #030208;
-      --bg-point: rgba(168, 85, 247, 0.4);
+      --bg-base: #050505;
+      --bg-point: rgba(255, 255, 255, 0.08);
       --text-main: #ffffff;
       --text-muted: rgba(255, 255, 255, 0.45);
       --nav-dot: rgba(255, 255, 255, 0.15);
@@ -32,15 +36,12 @@
       --card-border: rgba(255, 255, 255, 0.04);
       --card-hover-bg: rgba(255, 255, 255, 0.06);
       --card-shadow: 0 4px 15px rgba(0,0,0,0);
-      --card-hover-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      --circle-1: rgba(168, 85, 247, 0.15);
-      --circle-2: rgba(139, 92, 246, 0.08);
-      --circle-3: rgba(192, 132, 252, 0.06);
+      --card-hover-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
     body.light-theme {
-      --bg-base: #fbfbfe;
-      --bg-point: rgba(139, 92, 246, 0.18);
+      --bg-base: #fafafa;
+      --bg-point: rgba(0, 0, 0, 0.08);
       --text-main: #1f1a29;
       --text-muted: rgba(31, 26, 41, 0.6);
       --nav-dot: rgba(31, 26, 41, 0.15);
@@ -49,13 +50,10 @@
       --card-border: rgba(31, 26, 41, 0.05);
       --card-hover-bg: #ffffff;
       --card-shadow: 0 4px 15px rgba(31, 26, 41, 0.02);
-      --card-hover-shadow: 0 20px 35px rgba(124, 58, 237, 0.08);
-      --circle-1: rgba(233, 213, 255, 0.4);
-      --circle-2: rgba(216, 180, 254, 0.3);
-      --circle-3: rgba(243, 232, 255, 0.35);
+      --card-hover-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', sans-serif; cursor: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Geist', sans-serif; cursor: none; }
 
     html, body { height: 100%; overflow: hidden; background: var(--bg-base); color: var(--text-main); touch-action: none; }
 
@@ -66,7 +64,6 @@
 
     body.theme-ready .theme-toggle,
     body.theme-ready .lang-toggle,
-    body.theme-ready .moving-circle,
     body.theme-ready .bg-points,
     body.theme-ready .premium-row,
     body.theme-ready .project-card,
@@ -115,35 +112,12 @@
     .ctrl-btn:hover { transform: scale(1.1); background: var(--card-hover-bg); }
     .ctrl-btn i { font-size: 16px; color: var(--text-main); }
 
-    /* tiny, barely-there easter egg corner — own touch, doesn't shout */
-    .easter-corner {
-      position: fixed; bottom: 24px; right: 26px; z-index: 90;
-      font-size: 18px; opacity: 0.16; cursor: none;
-      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(.22,1,.36,1);
-      user-select: none;
-    }
-    .easter-corner:hover { opacity: 0.9; transform: scale(1.25) rotate(-8deg); }
-
-    .bg-space { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+    .bg-space { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: var(--bg-base); }
     .bg-points {
-      position: absolute; inset: -40vh 0;
-      background-image: radial-gradient(var(--bg-point) 2px, transparent 2px);
-      background-size: 26px 26px; z-index: 1; pointer-events: none;
+      position: absolute; inset: -10vh 0;
+      background-image: radial-gradient(var(--bg-point) 1px, transparent 1px);
+      background-size: 24px 24px; z-index: 1; pointer-events: none;
       will-change: transform; transition: transform 1.4s cubic-bezier(0.25,1,0.20,1);
-    }
-    .bg-circles-container {
-      position: absolute; width: 100%; height: 100%;
-      will-change: transform; z-index: 0;
-      transition: transform 1.4s cubic-bezier(0.25,1,0.20,1);
-    }
-    .moving-circle { position: absolute; border-radius: 50%; filter: blur(100px); animation: floatCircles 25s infinite alternate ease-in-out; }
-    .c1 { width: 350px; height: 350px; background: var(--circle-1); top: 10%; left: 15%; }
-    .c2 { width: 450px; height: 450px; background: var(--circle-2); bottom: 15%; right: 10%; animation-delay: -5s; animation-duration: 30s; }
-    .c3 { width: 300px; height: 300px; background: var(--circle-3); top: 60%; left: -5%; animation-delay: -10s; animation-duration: 22s; }
-    @keyframes floatCircles {
-      0%   { transform: translate(0,0) scale(1); }
-      50%  { transform: translate(60px,-40px) scale(1.1); }
-      100% { transform: translate(-20px,40px) scale(0.95); }
     }
 
     .floating-nav {
@@ -335,21 +309,58 @@
     .about-box p { font-size: 13.5px; color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; }
     .about-box p:last-child { margin-bottom: 0; }
 
+    /* ---------- comments ---------- */
+    .comments-wrap { display: flex; flex-direction: column; gap: 18px; max-height: 62vh; }
+    .comment-form {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
+      padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .comment-form:focus-within { border-color: var(--nav-active); }
+    .comment-form input, .comment-form textarea {
+      background: transparent; border: none; outline: none; color: var(--text-main);
+      font-family: 'Geist', sans-serif; font-size: 13.5px; resize: none; cursor: text;
+    }
+    .comment-form input::placeholder, .comment-form textarea::placeholder { color: var(--text-muted); }
+    .comment-form input { padding-bottom: 8px; border-bottom: 1px solid var(--card-border); }
+    .comment-form textarea { min-height: 56px; line-height: 1.6; }
+    .comment-form-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .comment-hint { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+    .comment-submit {
+      background: var(--nav-active); color: #fff; border: none; border-radius: 50px;
+      padding: 10px 22px; font-family: 'Geist', sans-serif; font-weight: 700; font-size: 12.5px;
+      cursor: none; transition: transform 0.25s, opacity 0.25s; flex-shrink: 0;
+    }
+    .comment-submit:hover { transform: scale(1.05); }
+    .comment-submit:disabled { opacity: 0.5; transform: none; cursor: none; }
+
+    .comments-list { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-right: 4px; }
+    .comments-list::-webkit-scrollbar { width: 5px; }
+    .comments-list::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 10px; }
+
+    .comment-item {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+      padding: 14px 18px; opacity: 0; transform: translateY(8px);
+      animation: commentIn 0.5s cubic-bezier(0.25,1,0.20,1) forwards;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .comment-item:hover { border-color: var(--nav-active); background: var(--card-hover-bg); }
+    @keyframes commentIn { to { opacity: 1; transform: translateY(0); } }
+    .comment-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+    .comment-name { font-size: 13px; font-weight: 700; color: var(--nav-active); }
+    .comment-time { font-size: 10.5px; color: var(--text-muted); flex-shrink: 0; }
+    .comment-msg { font-size: 13.5px; color: var(--text-main); line-height: 1.6; word-wrap: break-word; }
+
+    .comments-empty, .comments-loading, .comments-error {
+      font-size: 12.5px; color: var(--text-muted); text-align: center; padding: 14px 0;
+    }
+    .comments-error { color: #f97316; }
+
     .updated-label {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
       font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
       color: var(--text-muted); opacity: 0.5; z-index: 50; white-space: nowrap;
     }
-
-    .toast {
-      position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
-      background: var(--card-bg); border: 1px solid var(--nav-active);
-      color: var(--text-main); font-size: 12.5px; padding: 12px 20px; border-radius: 50px;
-      opacity: 0; pointer-events: none; z-index: 200; white-space: nowrap;
-      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(.22,1,.36,1);
-      box-shadow: var(--card-hover-shadow);
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     @media (max-width: 580px) {
       .projects-grid { grid-template-columns: 1fr; }
@@ -374,11 +385,6 @@
 
   <div class="bg-space">
     <div class="bg-points" id="parallaxPoints"></div>
-    <div class="bg-circles-container" id="bgContainer">
-      <div class="moving-circle c1"></div>
-      <div class="moving-circle c2"></div>
-      <div class="moving-circle c3"></div>
-    </div>
   </div>
 
   <div class="floating-nav" id="asideNav">
@@ -388,6 +394,7 @@
     <a onclick="goToSection(3)"></a>
     <a onclick="goToSection(4)"></a>
     <a onclick="goToSection(5)"></a>
+    <a onclick="goToSection(6)"></a>
   </div>
 
   <div class="scroll-wrapper" id="mainWrapper">
@@ -402,7 +409,7 @@
         </div>
         <div class="status-badge">
           <span class="status-dot busy" id="statusDot"></span>
-          <span id="statusText" data-ru="Не готов к заказам" data-en="Not available for work">Не готов к заказам</span>
+          <span id="statusText" data-ru="Не готов к ворку" data-en="Not available for work">Не готов к ворку</span>
         </div>
       </div>
       <div class="scroll-hint" data-ru="Прокрути вниз" data-en="Scroll down">Прокрути вниз</div>
@@ -512,16 +519,6 @@
           <div class="interest-flip" onclick="this.classList.toggle('flipped')">
             <div class="interest-flip-inner">
               <div class="interest-face front">
-                <div class="interest-icon"><i class="fa-solid fa-feather"></i></div>
-                <div class="interest-label" data-ru="Утки" data-en="Ducks">Утки</div>
-              </div>
-              <div class="interest-face back" data-ru="Очень нравятся, а почему не знаю" data-en="I really like them, but I don’t know why">Очень нравятся, а почему не знаю</div>
-            </div>
-          </div>
-
-          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
-            <div class="interest-flip-inner">
-              <div class="interest-face front">
                 <div class="interest-icon"><i class="fa-solid fa-code"></i></div>
                 <div class="interest-label" data-ru="Веб-разработка" data-en="Web Dev">Веб-разработка</div>
               </div>
@@ -545,17 +542,7 @@
                 <div class="interest-icon"><i class="fa-solid fa-music"></i></div>
                 <div class="interest-label" data-ru="Музыка" data-en="Music">Музыка</div>
               </div>
-              <div class="interest-face back" data-ru="Играет почти всегда, когда что-то пишу" data-en="Playing almost any time I'm coding">Играет почти всегда, когда что-то пишу</div>
-            </div>
-          </div>
-
-          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
-            <div class="interest-flip-inner">
-              <div class="interest-face front">
-                <div class="interest-icon"><i class="fa-solid fa-cat"></i></div>
-                <div class="interest-label" data-ru="Котики" data-en="Cats">Котики</div>
-              </div>
-              <div class="interest-face back" data-ru="Красивые и милые" data-en="Beautiful and cute">Красивые и милые</div>
+              <div class="interest-face back" data-ru="Играет почти всегда, когда я что-то пишу" data-en="Playing almost any time I'm coding">Играет почти всегда, когда я что-то пишу</div>
             </div>
           </div>
 
@@ -569,6 +556,16 @@
             </div>
           </div>
 
+          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
+            <div class="interest-flip-inner">
+              <div class="interest-face front">
+                <div class="interest-icon"><i class="fa-solid fa-cat"></i></div>
+                <div class="interest-label" data-ru="Котики" data-en="Cats">Котики</div>
+              </div>
+              <div class="interest-face back" data-ru="Просто люблю котиков" data-en="Love cats">Просто люблю котиков</div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
@@ -578,7 +575,7 @@
         <h2 class="page-title" data-ru="Разработка" data-en="Projects">Разработка</h2>
         <div class="projects-grid">
 
-          <a href="#" class="project-card">
+          <a href="https://guon220.pages.dev/" class="project-card">
             <div class="project-status" data-ru="Готово" data-en="Shipped">Готово</div>
             <div class="project-header">
               <div class="project-logo"><i class="fas fa-globe"></i></div>
@@ -586,11 +583,11 @@
             </div>
             <div class="project-meta">
               <h3 data-ru="Этот сайт" data-en="This site">Этот сайт</h3>
-              <p data-ru="Портфолио моё" data-en="My portfolio">Портфолио моё</p>
+              <p data-ru="Портфолио" data-en="Portfolio">Портфолио</p>
               <div class="project-stack"><span>HTML</span><span>CSS</span><span>JS</span></div>
             </div>
           </a>
-            
+
         </div>
       </div>
     </section>
@@ -599,16 +596,33 @@
       <div class="section-content">
         <h2 class="page-title" data-ru="Обо мне" data-en="About">Обо мне</h2>
         <div class="about-box">
-          <p data-ru="Кароч хз чо сюда писать" data-en="In short, I don't know what to write here.">Кароч хз чо сюда писать</p>
-          <p data-ru='Но если серьёзно то занимаюсь в основном веб разработкой, но утки тоже нравятся :D <span class="hidden-duck-text" onclick="quack(event)" style="opacity:0.3;cursor:none;">🦆</span>' data-en='But seriously — I&apos;m mostly into web development. Though ducks are pretty cool too :D <span class="hidden-duck-text" onclick="quack(event)" style="opacity:0.3;cursor:none;">🦆</span>'>Но если серьёзно то занимаюсь в основном веб разработкой, но утки тоже нравятся :D <span class="hidden-duck-text" onclick="quack(event)" style="opacity:0.3;cursor:none;">🦆</span></p>
+          <p data-ru="Привет, я занимаюсь веб-разработкой лолл" data-en="Hi, I am into web development loll">Привет, я занимаюсь веб-разработкой лолл</p>
+          <p data-ru="Ну я хз чо писать уже" data-en="Well, I don’t know what to write anymore">Ну я хз чо писать уже</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="comments">
+      <div class="section-content">
+        <h2 class="page-title" data-ru="Комментарии" data-en="Comments">Комментарии</h2>
+        <div class="comments-wrap">
+          <form class="comment-form" id="commentForm">
+            <input type="text" id="commentName" maxlength="40" data-ru-ph="Имя (необязательно)" data-en-ph="Name (optional)" placeholder="Имя (необязательно)">
+            <textarea id="commentMsg" maxlength="400" required data-ru-ph="Напиши что-нибудь..." data-en-ph="Write something..." placeholder="Напиши что-нибудь..."></textarea>
+            <div class="comment-form-row">
+              <span class="comment-hint" id="commentHint"></span>
+              <button type="submit" class="comment-submit" id="commentSubmit" data-ru="Отправить" data-en="Send">Отправить</button>
+            </div>
+          </form>
+          <div class="comments-list" id="commentsList">
+            <div class="comments-loading" data-ru="загрузка…" data-en="loading…">загрузка…</div>
+          </div>
         </div>
       </div>
     </section>
 
   </div>
 
-  <div class="easter-corner" id="easterDuck" title="??">🦆</div>
-  <div class="toast" id="toast"></div>
   <div class="updated-label" id="updatedLabel"></div>
 
   <script>
@@ -658,6 +672,9 @@
       document.querySelectorAll('[data-ru]').forEach(el => {
         el.innerHTML = lang === 'ru' ? el.dataset.ru : el.dataset.en;
       });
+      document.querySelectorAll('[data-ru-ph]').forEach(el => {
+        el.placeholder = lang === 'ru' ? el.dataset.ruPh : el.dataset.enPh;
+      });
       setUpdated(lang);
     }
 
@@ -684,7 +701,6 @@
     setTimeout(typeName, 400);
 
     const wrapper      = document.getElementById('mainWrapper');
-    const bgContainer  = document.getElementById('bgContainer');
     const parallaxPts  = document.getElementById('parallaxPoints');
     const contents     = document.querySelectorAll('.section-content');
     const navDots      = document.querySelectorAll('#asideNav a');
@@ -697,7 +713,6 @@
       isTransitioning = true;
       currentIdx = index;
       wrapper.style.transform     = `translateY(-${currentIdx * 100}vh)`;
-      bgContainer.style.transform = `translateY(-${currentIdx * 20}vh)`;
       parallaxPts.style.transform = `translateY(${currentIdx * 8}vh)`;
       navDots.forEach((dot, i)  => dot.classList.toggle('active', i === currentIdx));
       contents.forEach((c, i)   => c.classList.toggle('visible', i === currentIdx));
@@ -784,28 +799,94 @@
       requestAnimationFrame(animateRing);
     })();
 
-    document.querySelectorAll('a, button, .ctrl-btn, .floating-nav a, .slide-dots span, .skill-tag, .stack-card, .interest-flip, .project-card, .easter-corner').forEach(el => {
+    document.querySelectorAll('a, button, .ctrl-btn, .floating-nav a, .slide-dots span, .skill-tag, .stack-card, .interest-flip, .project-card, .comment-item, .comment-submit').forEach(el => {
       el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
       el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
     });
 
-    /* ---------- one small easter egg, own touch, not loud ---------- */
-    const duckPhrasesRu = ['Кря', 'Уточкиии', 'Ты нашёл утку уро', 'Пасхалочка'];
-    const duckPhrasesEn = ['Quack', 'Ducksssss', 'You found the duck', 'Easter egg'];
-    let toastTimer;
-    function showToast(text) {
-      const t = document.getElementById('toast');
-      t.textContent = text;
-      t.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+    /* ---------- comments via Supabase ---------- */
+    const SUPABASE_URL = 'https://eyohdmwrmmkxturvbduk.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5b2hkbXdybW1reHR1cnZiZHVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2ODg5ODAsImV4cCI6MjA5ODI2NDk4MH0.4GeuC79Z-hU8DZC-7tyzBhF2UZStLRSrbXShOOIrydY';
+    const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    const commentsList   = document.getElementById('commentsList');
+    const commentForm    = document.getElementById('commentForm');
+    const commentName    = document.getElementById('commentName');
+    const commentMsg     = document.getElementById('commentMsg');
+    const commentSubmit  = document.getElementById('commentSubmit');
+    const commentHint    = document.getElementById('commentHint');
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
     }
-    function quack(e) {
-      e.stopPropagation();
-      const list = currentLang === 'ru' ? duckPhrasesRu : duckPhrasesEn;
-      showToast(list[Math.floor(Math.random() * list.length)]);
+
+    function fmtCommentTime(iso) {
+      try {
+        const dt = new Date(iso);
+        return dt.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      } catch { return ''; }
     }
-    document.getElementById('easterDuck').addEventListener('click', quack);
+
+    function renderComments(rows) {
+      if (!rows.length) {
+        commentsList.innerHTML = `<div class="comments-empty" data-ru="Пока пусто — будь первым" data-en="Nothing yet — be the first">${currentLang === 'ru' ? 'Пока пусто — будь первым' : 'Nothing yet — be the first'}</div>`;
+        return;
+      }
+      commentsList.innerHTML = rows.map((c, i) => `
+        <div class="comment-item" style="animation-delay:${Math.min(i, 8) * 0.05}s">
+          <div class="comment-top">
+            <span class="comment-name">${escapeHtml(c.name || (currentLang === 'ru' ? 'Анон' : 'Anon'))}</span>
+            <span class="comment-time">${fmtCommentTime(c.created_at)}</span>
+          </div>
+          <div class="comment-msg">${escapeHtml(c.message)}</div>
+        </div>
+      `).join('');
+    }
+
+    async function loadComments() {
+      if (!sb) {
+        commentsList.innerHTML = '<div class="comments-error">Supabase SDK не загрузился</div>';
+        return;
+      }
+      const { data, error } = await sb
+        .from('comments')
+        .select('name, message, created_at')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) {
+        commentsList.innerHTML = `<div class="comments-error">ошибка загрузки: ${escapeHtml(error.message)}</div>`;
+        return;
+      }
+      renderComments(data || []);
+    }
+
+    if (commentForm) {
+      commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = commentMsg.value.trim();
+        if (!message || !sb) return;
+
+        commentSubmit.disabled = true;
+        commentHint.textContent = currentLang === 'ru' ? 'отправка…' : 'sending…';
+
+        const { error } = await sb.from('comments').insert({
+          name: commentName.value.trim() || null,
+          message: message.slice(0, 400)
+        });
+
+        if (error) {
+          commentHint.textContent = currentLang === 'ru' ? 'ошибка отправки' : 'failed to send';
+        } else {
+          commentMsg.value = '';
+          commentHint.textContent = '';
+          loadComments();
+        }
+        commentSubmit.disabled = false;
+      });
+    }
+
+    loadComments();
   </script>
 </body>
 </html>
