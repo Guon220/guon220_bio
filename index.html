@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ru" data-lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>guon220 | Portfolio</title>
+
+  <meta name="description" content="guon220 — веб-разработчик. Портфолио, контакты, проекты.">
+  <meta property="og:title" content="guon220 | Portfolio">
+  <meta property="og:description" content="Веб-разработчик. Смотри проекты и выходи на связь.">
+  <meta property="og:image" content="avatar.jpg">
+  <meta property="og:url" content="">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="guon220 | Portfolio">
+  <meta name="twitter:description" content="Веб-разработчик. Смотри проекты и выходи на связь.">
+  <meta name="twitter:image" content="avatar.jpg">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23a855f7'/><text y='.9em' font-size='72' x='50%' text-anchor='middle' dominant-baseline='auto' dy='0.1em'>g</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-base: #030208;
+      --bg-point: rgba(168, 85, 247, 0.4);
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.45);
+      --nav-dot: rgba(255, 255, 255, 0.15);
+      --nav-active: #a855f7;
+      --card-bg: rgba(255, 255, 255, 0.02);
+      --card-border: rgba(255, 255, 255, 0.04);
+      --card-hover-bg: rgba(255, 255, 255, 0.06);
+      --card-shadow: 0 4px 15px rgba(0,0,0,0);
+      --card-hover-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      --circle-1: rgba(168, 85, 247, 0.15);
+      --circle-2: rgba(139, 92, 246, 0.08);
+      --circle-3: rgba(192, 132, 252, 0.06);
+    }
+
+    body.light-theme {
+      --bg-base: #fbfbfe;
+      --bg-point: rgba(139, 92, 246, 0.18);
+      --text-main: #1f1a29;
+      --text-muted: rgba(31, 26, 41, 0.6);
+      --nav-dot: rgba(31, 26, 41, 0.15);
+      --nav-active: #7c3aed;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(31, 26, 41, 0.05);
+      --card-hover-bg: #ffffff;
+      --card-shadow: 0 4px 15px rgba(31, 26, 41, 0.02);
+      --card-hover-shadow: 0 20px 35px rgba(124, 58, 237, 0.08);
+      --circle-1: rgba(233, 213, 255, 0.4);
+      --circle-2: rgba(216, 180, 254, 0.3);
+      --circle-3: rgba(243, 232, 255, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', sans-serif; cursor: none; }
+
+    html, body { height: 100%; overflow: hidden; background: var(--bg-base); color: var(--text-main); touch-action: none; }
+
+    body.theme-transitioning,
+    body.theme-transitioning * { transition: none !important; }
+
+    body.theme-ready { transition: background 0.5s ease, color 0.5s ease; }
+
+    body.theme-ready .theme-toggle,
+    body.theme-ready .lang-toggle,
+    body.theme-ready .moving-circle,
+    body.theme-ready .bg-points,
+    body.theme-ready .premium-row,
+    body.theme-ready .project-card,
+    body.theme-ready .about-box,
+    body.theme-ready .skill-tag,
+    body.theme-ready .stack-card,
+    body.theme-ready .stack-icon,
+    body.theme-ready .interest-card,
+    body.theme-ready .project-logo,
+    body.theme-ready .floating-nav a,
+    body.theme-ready .theme-toggle i { transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease !important; }
+
+    #cursor-dot {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--nav-active); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      will-change: left, top;
+    }
+    #cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1.5px solid var(--nav-active); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%); opacity: 0.5;
+      transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease, border-color 0.3s ease;
+      will-change: left, top;
+    }
+    #cursor-ring.hovering { width: 48px; height: 48px; opacity: 0.8; }
+    @media (hover: none) { #cursor-dot, #cursor-ring { display: none; } * { cursor: auto; } }
+
+    .top-controls {
+      position: fixed; top: 30px; right: 35px;
+      z-index: 100; display: flex; gap: 10px; align-items: center;
+    }
+
+    .ctrl-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      cursor: none; box-shadow: var(--card-shadow);
+      transition: transform 0.3s ease, background 0.3s ease;
+      color: var(--text-main); font-size: 13px; font-weight: 700;
+      letter-spacing: 0;
+    }
+    .ctrl-btn:hover { transform: scale(1.1); background: var(--card-hover-bg); }
+    .ctrl-btn i { font-size: 16px; color: var(--text-main); }
+
+    /* tiny, barely-there easter egg corner — own touch, doesn't shout */
+    .easter-corner {
+      position: fixed; bottom: 24px; right: 26px; z-index: 90;
+      font-size: 18px; opacity: 0.16; cursor: none;
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(.22,1,.36,1);
+      user-select: none;
+    }
+    .easter-corner:hover { opacity: 0.9; transform: scale(1.25) rotate(-8deg); }
+
+    .bg-space { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+    .bg-points {
+      position: absolute; inset: -40vh 0;
+      background-image: radial-gradient(var(--bg-point) 2px, transparent 2px);
+      background-size: 26px 26px; z-index: 1; pointer-events: none;
+      will-change: transform; transition: transform 1.4s cubic-bezier(0.25,1,0.20,1);
+    }
+    .bg-circles-container {
+      position: absolute; width: 100%; height: 100%;
+      will-change: transform; z-index: 0;
+      transition: transform 1.4s cubic-bezier(0.25,1,0.20,1);
+    }
+    .moving-circle { position: absolute; border-radius: 50%; filter: blur(100px); animation: floatCircles 25s infinite alternate ease-in-out; }
+    .c1 { width: 350px; height: 350px; background: var(--circle-1); top: 10%; left: 15%; }
+    .c2 { width: 450px; height: 450px; background: var(--circle-2); bottom: 15%; right: 10%; animation-delay: -5s; animation-duration: 30s; }
+    .c3 { width: 300px; height: 300px; background: var(--circle-3); top: 60%; left: -5%; animation-delay: -10s; animation-duration: 22s; }
+    @keyframes floatCircles {
+      0%   { transform: translate(0,0) scale(1); }
+      50%  { transform: translate(60px,-40px) scale(1.1); }
+      100% { transform: translate(-20px,40px) scale(0.95); }
+    }
+
+    .floating-nav {
+      position: fixed; right: 35px; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 20px; z-index: 10;
+    }
+    .floating-nav a {
+      width: 6px; height: 6px; background: var(--nav-dot); border-radius: 50%; cursor: none;
+      transition: transform 0.5s cubic-bezier(0.25,1,0.20,1), background 0.5s, box-shadow 0.5s;
+      display: block;
+    }
+    .floating-nav a:hover, .floating-nav a.active {
+      background: var(--nav-active); transform: scale(2.2); box-shadow: 0 0 15px var(--nav-active);
+    }
+
+    .scroll-wrapper { height: 100vh; width: 100%; transition: transform 1.4s cubic-bezier(0.25,1,0.20,1); will-change: transform; position: relative; z-index: 3; }
+
+    section { height: 100vh; width: 100%; display: flex; justify-content: center; align-items: center; padding: 0 24px; position: relative; }
+
+    .section-content { width: 100%; max-width: 660px; opacity: 0; transform: translateY(10px); transition: opacity 1.2s ease, transform 1.2s ease; }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+
+    .profile-block { text-align: center; }
+    .avatar {
+      width: 120px; height: 120px; border-radius: 50%;
+      margin: 0 auto 20px;
+      background: url('avatar.jpg') center/cover no-repeat;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-hover-shadow);
+      transition: transform 0.4s cubic-bezier(0.25,1,0.20,1);
+      will-change: transform;
+    }
+
+    .profile-block h1 { font-size: 44px; font-weight: 700; margin-bottom: 8px; letter-spacing: -1px; min-height: 54px; }
+    .typing-cursor { display: inline-block; width: 3px; height: 0.85em; background: var(--nav-active); margin-left: 3px; vertical-align: middle; animation: blink 1s step-end infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .profile-meta {
+      font-size: 13px; color: var(--text-muted); margin-bottom: 16px;
+      display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap;
+    }
+    .profile-meta span { display: flex; align-items: center; gap: 5px; }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 14px; border-radius: 50px;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      font-size: 12px; color: var(--text-main);
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #22c55e; box-shadow: 0 0 8px #22c55e;
+      animation: pulse-dot 2.5s infinite ease-in-out; flex-shrink: 0;
+    }
+    .status-dot.busy { background: #f97316; box-shadow: 0 0 8px #f97316; }
+    @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(0.75); } }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text-muted); animation: bounce 3s infinite ease-in-out;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translate(-50%,0); opacity: 0.4; }
+      50%      { transform: translate(-50%,-10px); opacity: 0.8; }
+    }
+
+    .page-title {
+      font-size: 24px; font-weight: 700; margin-bottom: 30px;
+      display: flex; align-items: center; gap: 15px;
+    }
+    .page-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--card-border), transparent); }
+
+    .slider-viewport { width: 100%; overflow: hidden; position: relative; cursor: none; user-select: none; touch-action: pan-y; }
+    .slider-track { display: flex; width: 200%; transition: transform 0.7s cubic-bezier(0.25,1,0.20,1); will-change: transform; }
+    .slider-slide { width: 50%; display: flex; flex-direction: column; gap: 12px; padding: 4px; }
+    .slide-subtitle {
+      font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--nav-active); margin-bottom: 6px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .slide-dots { display: flex; gap: 8px; margin-top: 15px; justify-content: center; }
+    .slide-dots span { width: 16px; height: 4px; background: var(--nav-dot); border-radius: 2px; cursor: none; transition: all 0.4s ease; }
+    .slide-dots span.active { background: var(--nav-active); width: 28px; }
+
+    .premium-row {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 22px 26px; text-decoration: none; color: var(--text-main);
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background 0.4s, border-color 0.4s, transform 0.4s, box-shadow 0.4s;
+    }
+    .row-left { display: flex; align-items: center; gap: 18px; }
+    .premium-row i.icon-main { font-size: 18px; color: var(--text-muted); transition: color 0.3s; }
+    .premium-row .arrow-icon { font-size: 11px; color: var(--text-muted); transition: transform 0.3s, color 0.3s; }
+    .premium-row:hover { background: var(--card-hover-bg); border-color: var(--nav-active); transform: translateX(4px); box-shadow: var(--card-hover-shadow); }
+    .premium-row:hover i.icon-main { color: var(--nav-active); }
+    .premium-row:hover .arrow-icon { color: var(--nav-active); transform: translateX(3px); }
+
+    .skills-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 50px;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      font-size: 12.5px; color: var(--text-muted);
+      transition: background 0.3s, border-color 0.3s, color 0.3s, transform 0.3s;
+    }
+    .skill-tag:hover { background: var(--card-hover-bg); border-color: var(--nav-active); color: var(--text-main); transform: translateY(-2px); }
+    .skill-tag i { font-size: 13px; color: var(--nav-active); }
+
+    .stack-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .stack-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 18px; padding: 18px 20px;
+      display: flex; align-items: center; gap: 16px;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .stack-card:hover { background: var(--card-hover-bg); border-color: var(--nav-active); transform: translateY(-2px); box-shadow: var(--card-hover-shadow); }
+    .stack-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--card-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; color: var(--nav-active);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    body.light-theme .stack-icon { background: rgba(0,0,0,0.02); }
+    .stack-card:hover .stack-icon { border-color: var(--nav-active); background: rgba(168,85,247,0.1); }
+    .stack-label { font-size: 10.5px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+    .stack-value { font-size: 16px; font-weight: 700; color: var(--text-main); }
+
+    .interests-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .interest-flip { position: relative; height: 120px; perspective: 1200px; cursor: none; }
+    .interest-flip-inner {
+      position: relative; width: 100%; height: 100%;
+      transition: transform 0.7s cubic-bezier(0.25,1,0.20,1);
+      transform-style: preserve-3d;
+    }
+    .interest-flip.flipped .interest-flip-inner { transform: rotateY(180deg); }
+    .interest-face {
+      position: absolute; inset: 0; backface-visibility: hidden;
+      border-radius: 18px; border: 1px solid var(--card-border); background: var(--card-bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      padding: 16px; text-align: center;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .interest-flip:hover .interest-face.front { background: var(--card-hover-bg); border-color: var(--nav-active); transform: translateY(-3px); box-shadow: var(--card-hover-shadow); }
+    .interest-face.back {
+      transform: rotateY(180deg);
+      background: var(--card-hover-bg); border-color: var(--nav-active);
+      font-size: 11.5px; line-height: 1.5; color: var(--text-main); font-weight: 500;
+    }
+    .interest-icon { font-size: 26px; line-height: 1; }
+    .interest-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; }
+    .project-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 24px; text-decoration: none; color: var(--text-main);
+      display: flex; flex-direction: column; gap: 14px;
+      transition: background 0.4s, border-color 0.4s, transform 0.4s, box-shadow 0.4s;
+      position: relative;
+    }
+    .project-card:hover { background: var(--card-hover-bg); border-color: var(--nav-active); transform: translateY(-4px); box-shadow: var(--card-hover-shadow); }
+    .project-header { display: flex; align-items: center; justify-content: space-between; }
+    .project-logo {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--card-border);
+      display: flex; justify-content: center; align-items: center;
+      font-size: 18px; color: var(--text-muted);
+      transition: color 0.3s, background 0.3s;
+    }
+    body.light-theme .project-logo { background: rgba(0,0,0,0.02); }
+    .project-card:hover .project-logo { color: var(--nav-active); background: rgba(168,85,247,0.1); }
+    .project-card .arrow-icon { font-size: 11px; color: var(--text-muted); transition: transform 0.3s, color 0.3s; }
+    .project-card:hover .arrow-icon { color: var(--nav-active); transform: translateX(3px) translateY(-3px); }
+    .project-meta h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .project-meta p { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; }
+    .project-stack { display: flex; gap: 6px; flex-wrap: wrap; }
+    .project-stack span {
+      font-size: 10.5px; letter-spacing: 0.3px; color: var(--nav-active);
+      border: 1px solid rgba(168,85,247,0.25); border-radius: 6px; padding: 3px 8px;
+    }
+    .project-status {
+      position: absolute; top: 24px; right: 24px;
+      font-size: 9.5px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-muted); opacity: 0.8;
+    }
+
+    .about-box { background: var(--card-bg); border: 1px solid var(--card-border); padding: 35px; border-radius: 22px; }
+    .about-box p { font-size: 13.5px; color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; }
+    .about-box p:last-child { margin-bottom: 0; }
+
+    .updated-label {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-muted); opacity: 0.5; z-index: 50; white-space: nowrap;
+    }
+
+    .toast {
+      position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
+      background: var(--card-bg); border: 1px solid var(--nav-active);
+      color: var(--text-main); font-size: 12.5px; padding: 12px 20px; border-radius: 50px;
+      opacity: 0; pointer-events: none; z-index: 200; white-space: nowrap;
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(.22,1,.36,1);
+      box-shadow: var(--card-hover-shadow);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 580px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .interests-grid { grid-template-columns: repeat(2, 1fr); }
+      .stack-grid { grid-template-columns: 1fr; }
+      * { cursor: auto; }
+      #cursor-dot, #cursor-ring { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <div class="top-controls">
+    <div class="ctrl-btn" id="langBtn" onclick="toggleLang()">EN</div>
+    <div class="ctrl-btn" onclick="toggleTheme()">
+      <i class="fas fa-moon" id="themeIcon"></i>
+    </div>
+  </div>
+
+  <div class="bg-space">
+    <div class="bg-points" id="parallaxPoints"></div>
+    <div class="bg-circles-container" id="bgContainer">
+      <div class="moving-circle c1"></div>
+      <div class="moving-circle c2"></div>
+      <div class="moving-circle c3"></div>
+    </div>
+  </div>
+
+  <div class="floating-nav" id="asideNav">
+    <a class="active" onclick="goToSection(0)"></a>
+    <a onclick="goToSection(1)"></a>
+    <a onclick="goToSection(2)"></a>
+    <a onclick="goToSection(3)"></a>
+    <a onclick="goToSection(4)"></a>
+    <a onclick="goToSection(5)"></a>
+  </div>
+
+  <div class="scroll-wrapper" id="mainWrapper">
+
+    <section id="profile">
+      <div class="section-content visible profile-block">
+        <div class="avatar" id="magneticAvatar"></div>
+        <h1 id="typingName"><span class="typing-cursor"></span></h1>
+        <div class="profile-meta">
+          <span><i class="fas fa-cake-candles"></i> <span data-ru="13 лет" data-en="13 y.o.">13 лет</span></span>
+          <span><i class="fas fa-location-dot"></i> <span data-ru="Украина" data-en="Ukraine">Украина</span></span>
+        </div>
+        <div class="status-badge">
+          <span class="status-dot busy" id="statusDot"></span>
+          <span id="statusText" data-ru="Не готов к заказам" data-en="Not available for work">Не готов к заказам</span>
+        </div>
+      </div>
+      <div class="scroll-hint" data-ru="Прокрути вниз" data-en="Scroll down">Прокрути вниз</div>
+    </section>
+
+    <section id="socials">
+      <div class="section-content">
+        <h2 class="page-title" data-ru="Связь" data-en="Contact">Связь</h2>
+        <div class="slider-viewport" id="sliderViewport">
+          <div class="slider-track" id="sliderTrack">
+            <div class="slider-slide">
+              <div class="slide-subtitle">
+                <span data-ru="Основное" data-en="Main">Основное</span>
+                <span style="font-size:11px;opacity:0.6" data-ru="Тяни влево →" data-en="Swipe left →">Тяни влево <i class="fas fa-arrow-right"></i></span>
+              </div>
+              <a href="https://t.me/guon220" target="_blank" class="premium-row">
+                <div class="row-left"><i class="fab fa-telegram icon-main"></i><span data-ru="Telegram личный" data-en="Bio Channel">Bio Канал</span></div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+              </a>
+              <a href="mailto:gamepostyou@gmail.com" target="_blank" class="premium-row">
+                <div class="row-left"><i class="fa fa-envelope icon-main"></i><span>Email</span></div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+              </a>
+            </div>
+            <div class="slider-slide">
+              <div class="slide-subtitle">
+                <span style="font-size:11px;opacity:0.6" data-ru="← Назад" data-en="← Back">← Назад</span>
+                <span data-ru="Мои каналы" data-en="My channels">Мои каналы</span>
+              </div>
+              <a href="https://t.me/lalalaguon220" target="_blank" class="premium-row">
+                <div class="row-left"><i class="fab fa-telegram icon-main"></i><span data-ru="Bio Канал" data-en="Bio Channel">Bio Канал</span></div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+              </a>
+              <a href="https://t.me/life_guon220" target="_blank" class="premium-row">
+                <div class="row-left"><i class="fab fa-telegram icon-main"></i><span>Life</span></div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+              </a>
+              <a href="https://github.com/Guon220" target="_blank" class="premium-row">
+                <div class="row-left"><i class="fab fa-github icon-main"></i><span data-ru="GitHub Профиль" data-en="GitHub Profile">GitHub Профиль</span></div>
+                <i class="fas fa-chevron-right arrow-icon"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="slide-dots">
+          <span class="active" id="dotSlide0" onclick="goToSlide(0)"></span>
+          <span id="dotSlide1" onclick="goToSlide(1)"></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="section-content">
+        <h2 class="page-title" data-ru="Стек" data-en="Stack">Стек</h2>
+        <div class="stack-grid">
+          <div class="stack-card">
+            <div class="stack-icon"><i class="fa-solid fa-code"></i></div>
+            <div>
+              <div class="stack-label" data-ru="Любимый язык" data-en="Favorite language">Любимый язык</div>
+              <div class="stack-value">PHP</div>
+            </div>
+          </div>
+          <div class="stack-card">
+            <div class="stack-icon"><i class="fa-solid fa-palette"></i></div>
+            <div>
+              <div class="stack-label" data-ru="Чаще всего верстаю" data-en="Usually build with">Чаще всего верстаю</div>
+              <div class="stack-value">HTML / CSS</div>
+            </div>
+          </div>
+          <div class="stack-card">
+            <div class="stack-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div>
+              <div class="stack-label" data-ru="Логика и интерактив" data-en="Logic & interactivity">Логика и интерактив</div>
+              <div class="stack-value">JavaScript</div>
+            </div>
+          </div>
+          <div class="stack-card">
+            <div class="stack-icon"><i class="fa-solid fa-database"></i></div>
+            <div>
+              <div class="stack-label" data-ru="Базы данных" data-en="Databases">Базы данных</div>
+              <div class="stack-value">SQL</div>
+            </div>
+          </div>
+          <div class="stack-card">
+            <div class="stack-icon"><i class="fa-solid fa-terminal"></i></div>
+            <div>
+              <div class="stack-label" data-ru="Рабочая среда" data-en="Daily editor">Рабочая среда</div>
+              <div class="stack-value">VS Code</div>
+            </div>
+          </div>
+          <div class="stack-card">
+            <div class="stack-icon"><i class="fab fa-github"></i></div>
+            <div>
+              <div class="stack-label" data-ru="Версии и код" data-en="Version control">Версии и код</div>
+              <div class="stack-value">Git / GitHub</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="interests">
+      <div class="section-content">
+        <h2 class="page-title" data-ru="Интересы" data-en="Interests">Интересы</h2>
+        <div class="interests-grid">
+
+          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
+            <div class="interest-flip-inner">
+              <div class="interest-face front">
+                <div class="interest-icon"><i class="fa-solid fa-feather"></i></div>
+                <div class="interest-label" data-ru="Утки" data-en="Ducks">Утки</div>
+              </div>
+              <div class="interest-face back" data-ru="Без причины. Просто нравятся." data-en="No reason. Just like them.">Без причины. Просто нравятся.</div>
+            </div>
+          </div>
+
+          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
+            <div class="interest-flip-inner">
+              <div class="interest-face front">
+                <div class="interest-icon"><i class="fa-solid fa-code"></i></div>
+                <div class="interest-label" data-ru="Веб-разработка" data-en="Web Dev">Веб-разработка</div>
+              </div>
+              <div class="interest-face back" data-ru="Чем занят, когда не занят ничем другим." data-en="What I'm doing when I'm not doing anything else.">Чем занят, когда не занят ничем другим.</div>
+            </div>
+          </div>
+
+          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
+            <div class="interest-flip-inner">
+              <div class="interest-face front">
+                <div class="interest-icon"><i class="fa-solid fa-gamepad"></i></div>
+                <div class="interest-label" data-ru="Игры" data-en="Gaming">Игры</div>
+              </div>
+              <div class="interest-face back" data-ru="Minecraft и CS2 — заменю, если другие." data-en="Minecraft and CS2 — will swap if different.">Minecraft и CS2 — заменю, если другие.</div>
+            </div>
+          </div>
+
+          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
+            <div class="interest-flip-inner">
+              <div class="interest-face front">
+                <div class="interest-icon"><i class="fa-solid fa-music"></i></div>
+                <div class="interest-label" data-ru="Музыка" data-en="Music">Музыка</div>
+              </div>
+              <div class="interest-face back" data-ru="Играет почти всегда, когда я что-то пишу." data-en="Playing almost any time I'm coding.">Играет почти всегда, когда я что-то пишу.</div>
+            </div>
+          </div>
+
+          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
+            <div class="interest-flip-inner">
+              <div class="interest-face front">
+                <div class="interest-icon"><i class="fa-solid fa-cat"></i></div>
+                <div class="interest-label" data-ru="Котики" data-en="Cats">Котики</div>
+              </div>
+              <div class="interest-face back" data-ru="Не спорю с котиками. Они правы." data-en="I don't argue with cats. They're right.">Не спорю с котиками. Они правы.</div>
+            </div>
+          </div>
+
+          <div class="interest-flip" onclick="this.classList.toggle('flipped')">
+            <div class="interest-flip-inner">
+              <div class="interest-face front">
+                <div class="interest-icon"><i class="fa-solid fa-moon"></i></div>
+                <div class="interest-label" data-ru="Ночной кодинг" data-en="Night coding">Ночной кодинг</div>
+              </div>
+              <div class="interest-face back" data-ru="Лучшие идеи приходят почему-то ночью." data-en="The best ideas show up at night, for some reason.">Лучшие идеи приходят почему-то ночью.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="section-content">
+        <h2 class="page-title" data-ru="Разработка" data-en="Projects">Разработка</h2>
+        <div class="projects-grid">
+
+          <a href="#" class="project-card">
+            <div class="project-status" data-ru="Готово" data-en="Shipped">Готово</div>
+            <div class="project-header">
+              <div class="project-logo"><i class="fas fa-globe"></i></div>
+              <i class="fas fa-arrow-up-right-from-square arrow-icon"></i>
+            </div>
+            <div class="project-meta">
+              <h3 data-ru="Этот сайт" data-en="This site">Этот сайт</h3>
+              <p data-ru="Портфолио с нуля — анимация, мультиязычность, без фреймворков." data-en="Portfolio from scratch — animation, multilingual, no frameworks.">Портфолио с нуля — анимация, мультиязычность, без фреймворков.</p>
+              <div class="project-stack"><span>HTML</span><span>CSS</span><span>JS</span></div>
+            </div>
+          </a>
+
+          <a href="#" class="project-card">
+            <div class="project-status" data-ru="В работе" data-en="In progress">В работе</div>
+            <div class="project-header">
+              <div class="project-logo"><i class="fas fa-robot"></i></div>
+              <i class="fas fa-arrow-up-right-from-square arrow-icon"></i>
+            </div>
+            <div class="project-meta">
+              <h3 data-ru="Telegram-бот заметок" data-en="Telegram notes bot">Telegram-бот заметок</h3>
+              <p data-ru="Сохраняет заметки в базу, присылает обратно по расписанию." data-en="Stores notes in a database, sends them back on schedule.">Сохраняет заметки в базу, присылает обратно по расписанию.</p>
+              <div class="project-stack"><span>Python</span><span>SQL</span></div>
+            </div>
+          </a>
+
+          <a href="#" class="project-card">
+            <div class="project-status" data-ru="Планируется" data-en="Planned">Планируется</div>
+            <div class="project-header">
+              <div class="project-logo"><i class="fas fa-layer-group"></i></div>
+              <i class="fas fa-arrow-up-right-from-square arrow-icon"></i>
+            </div>
+            <div class="project-meta">
+              <h3 data-ru="Мини-CMS для блога" data-en="Mini blog CMS">Мини-CMS для блога</h3>
+              <p data-ru="Своя авторизация, своя база, свой админ-интерфейс." data-en="Custom auth, custom database, custom admin panel.">Своя авторизация, своя база, свой админ-интерфейс.</p>
+              <div class="project-stack"><span>PHP</span><span>SQL</span></div>
+            </div>
+          </a>
+
+          <a href="#" class="project-card">
+            <div class="project-status" data-ru="Идея" data-en="Concept">Идея</div>
+            <div class="project-header">
+              <div class="project-logo"><i class="fas fa-chart-line"></i></div>
+              <i class="fas fa-arrow-up-right-from-square arrow-icon"></i>
+            </div>
+            <div class="project-meta">
+              <h3 data-ru="CLI-трекер привычек" data-en="CLI habit tracker">CLI-трекер привычек</h3>
+              <p data-ru="Консольная утилита на Python прямо из терминала." data-en="Python command-line utility, straight from the terminal.">Консольная утилита на Python прямо из терминала.</p>
+              <div class="project-stack"><span>Python</span><span>Bash</span></div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="section-content">
+        <h2 class="page-title" data-ru="Обо мне" data-en="About">Обо мне</h2>
+        <div class="about-box">
+          <p data-ru="Я это я" data-en="It's me">Кароч хз чо сюда писать</p>
+          <p data-ru='Но если серьёзно то занимаюсь в основном веб разработкой, но утки тоже нравятся :D <span class="hidden-duck-text" onclick="quack(event)" style="opacity:0.3;cursor:none;">🦆</span>' data-en='But seriously — I&apos;m mostly into web development. Though ducks are pretty cool too :D <span class="hidden-duck-text" onclick="quack(event)" style="opacity:0.3;cursor:none;">🦆</span>'>Но если серьёзно то занимаюсь в основном веб разработкой, но утки тоже нравятся :D <span class="hidden-duck-text" onclick="quack(event)" style="opacity:0.3;cursor:none;">🦆</span></p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="easter-corner" id="easterDuck" title="??">🦆</div>
+  <div class="toast" id="toast"></div>
+  <div class="updated-label" id="updatedLabel"></div>
+
+  <script>
+    const d = new Date();
+    const monthsRu = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+    const monthsEn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    function setUpdated(lang) {
+      document.getElementById('updatedLabel').textContent = lang === 'ru'
+        ? `${d.getDate()} ${monthsRu[d.getMonth()]} ${d.getFullYear()}`
+        : `${monthsEn[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    }
+
+    function applyTheme(theme) {
+      const body = document.body;
+      const icon = document.getElementById('themeIcon');
+      body.classList.add('theme-transitioning');
+      body.classList.remove('theme-ready');
+      requestAnimationFrame(() => {
+        if (theme === 'light') { body.classList.add('light-theme'); icon.className = 'fas fa-sun'; }
+        else                   { body.classList.remove('light-theme'); icon.className = 'fas fa-moon'; }
+        requestAnimationFrame(() => {
+          body.classList.remove('theme-transitioning');
+          body.classList.add('theme-ready');
+        });
+      });
+    }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.contains('light-theme');
+      const next = isLight ? 'dark' : 'light';
+      localStorage.setItem('theme', next);
+      applyTheme(next);
+    }
+
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved) { applyTheme(saved); return; }
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) applyTheme('light');
+    })();
+
+    let currentLang = localStorage.getItem('lang') || 'ru';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      document.documentElement.setAttribute('data-lang', lang);
+      document.getElementById('langBtn').textContent = lang === 'ru' ? 'EN' : 'RU';
+      document.querySelectorAll('[data-ru]').forEach(el => {
+        el.innerHTML = lang === 'ru' ? el.dataset.ru : el.dataset.en;
+      });
+      setUpdated(lang);
+    }
+
+    function toggleLang() {
+      const next = currentLang === 'ru' ? 'en' : 'ru';
+      localStorage.setItem('lang', next);
+      applyLang(next);
+    }
+
+    applyLang(currentLang);
+
+    const nameEl = document.getElementById('typingName');
+    const fullName = 'guon220';
+    let charIdx = 0;
+    function typeName() {
+      if (charIdx <= fullName.length) {
+        nameEl.innerHTML = fullName.slice(0, charIdx) + '<span class="typing-cursor"></span>';
+        charIdx++;
+        setTimeout(typeName, charIdx <= fullName.length ? 120 : 800);
+      } else {
+        setTimeout(() => { nameEl.innerHTML = fullName; }, 800);
+      }
+    }
+    setTimeout(typeName, 400);
+
+    const wrapper      = document.getElementById('mainWrapper');
+    const bgContainer  = document.getElementById('bgContainer');
+    const parallaxPts  = document.getElementById('parallaxPoints');
+    const contents     = document.querySelectorAll('.section-content');
+    const navDots      = document.querySelectorAll('#asideNav a');
+
+    let currentIdx = 0, isTransitioning = false;
+    const totalSections = contents.length;
+
+    function goToSection(index) {
+      if (index < 0 || index >= totalSections) return;
+      isTransitioning = true;
+      currentIdx = index;
+      wrapper.style.transform     = `translateY(-${currentIdx * 100}vh)`;
+      bgContainer.style.transform = `translateY(-${currentIdx * 20}vh)`;
+      parallaxPts.style.transform = `translateY(${currentIdx * 8}vh)`;
+      navDots.forEach((dot, i)  => dot.classList.toggle('active', i === currentIdx));
+      contents.forEach((c, i)   => c.classList.toggle('visible', i === currentIdx));
+      setTimeout(() => { isTransitioning = false; }, 1400);
+    }
+
+    window.addEventListener('wheel', (e) => {
+      if (isTransitioning) return;
+      if (Math.abs(e.deltaY) > 25) {
+        if (e.deltaY > 0) goToSection(currentIdx + 1);
+        else              goToSection(currentIdx - 1);
+      }
+    }, { passive: true });
+
+    let tsX = 0, tsY = 0;
+    window.addEventListener('touchstart', (e) => { tsX = e.touches[0].clientX; tsY = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener('touchend', (e) => {
+      if (isTransitioning) return;
+      const diffX = tsX - e.changedTouches[0].clientX;
+      const diffY = tsY - e.changedTouches[0].clientY;
+      if (Math.abs(diffY) > Math.abs(diffX)) {
+        if (Math.abs(diffY) > 40) { if (diffY > 0) goToSection(currentIdx + 1); else goToSection(currentIdx - 1); }
+      } else if (currentIdx === 1 && Math.abs(diffX) > 40) {
+        if (diffX > 0) goToSlide(1); else goToSlide(0);
+      }
+    }, { passive: true });
+
+    const sliderViewport = document.getElementById('sliderViewport');
+    const sliderTrack    = document.getElementById('sliderTrack');
+    const dot0 = document.getElementById('dotSlide0');
+    const dot1 = document.getElementById('dotSlide1');
+    let currentSlide = 0;
+
+    function goToSlide(idx) {
+      currentSlide = idx;
+      sliderTrack.style.transform = idx === 0 ? 'translateX(0%)' : 'translateX(-50%)';
+      dot0.classList.toggle('active', idx === 0);
+      dot1.classList.toggle('active', idx === 1);
+    }
+
+    let isDragging = false, dragStartX = 0, dragMoved = false;
+    sliderViewport.addEventListener('mousedown', (e) => { isDragging = true; dragMoved = false; dragStartX = e.clientX; });
+    sliderViewport.addEventListener('mousemove', (e) => { if (!isDragging) return; if (Math.abs(e.clientX - dragStartX) > 10) dragMoved = true; });
+    window.addEventListener('mouseup', (e) => {
+      if (!isDragging) return; isDragging = false;
+      const diff = dragStartX - e.clientX;
+      if (Math.abs(diff) > 50) { if (diff > 0) goToSlide(1); else goToSlide(0); }
+    });
+    sliderViewport.querySelectorAll('a').forEach(l => l.addEventListener('click', (e) => { if (dragMoved) e.preventDefault(); }));
+
+    window.addEventListener('keydown', (e) => {
+      if (isTransitioning) return;
+      if (e.key === 'ArrowDown')  goToSection(currentIdx + 1);
+      if (e.key === 'ArrowUp')    goToSection(currentIdx - 1);
+      if (currentIdx === 1) {
+        if (e.key === 'ArrowRight') goToSlide(1);
+        if (e.key === 'ArrowLeft')  goToSlide(0);
+      }
+    });
+
+    const avatar = document.getElementById('magneticAvatar');
+    if (avatar) {
+      avatar.parentElement.addEventListener('mousemove', (e) => {
+        const r = avatar.getBoundingClientRect();
+        avatar.style.transform = `translate(${(e.clientX-(r.left+r.width/2))*0.12}px,${(e.clientY-(r.top+r.height/2))*0.12}px) scale(1.03)`;
+      });
+      avatar.parentElement.addEventListener('mouseleave', () => { avatar.style.transform = 'translate(0,0) scale(1)'; });
+    }
+
+    const cursorDot  = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('a, button, .ctrl-btn, .floating-nav a, .slide-dots span, .skill-tag, .stack-card, .interest-flip, .project-card, .easter-corner').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
+    });
+
+    /* ---------- one small easter egg, own touch, not loud ---------- */
+    const duckPhrasesRu = ['Кря.', 'Утка одобряет код.', 'Ты нашёл утку.', 'Утиный режим: включён.'];
+    const duckPhrasesEn = ['Quack.', 'The duck approves your code.', 'You found the duck.', 'Duck mode: enabled.'];
+    let toastTimer;
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      t.textContent = text;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+    }
+    function quack(e) {
+      e.stopPropagation();
+      const list = currentLang === 'ru' ? duckPhrasesRu : duckPhrasesEn;
+      showToast(list[Math.floor(Math.random() * list.length)]);
+    }
+    document.getElementById('easterDuck').addEventListener('click', quack);
+  </script>
+</body>
+</html>
