@@ -870,13 +870,17 @@
         commentSubmit.disabled = true;
         commentHint.textContent = currentLang === 'ru' ? 'отправка…' : 'sending…';
 
+        // ИСПРАВЛЕНИЕ: Если имя пустое, передаем "Анон" или "Anonymous"
+        const userName = commentName.value.trim() || (currentLang === 'ru' ? 'Анон' : 'Anonymous');
+
         const { error } = await sb.from('comments').insert({
-          name: commentName.value.trim() || null,
+          name: userName,
           message: message.slice(0, 400)
         });
 
         if (error) {
           commentHint.textContent = currentLang === 'ru' ? 'ошибка отправки' : 'failed to send';
+          console.error(error); // Поможет видеть детали ошибки в консоли
         } else {
           commentMsg.value = '';
           commentHint.textContent = '';
