@@ -19,6 +19,7 @@
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23a855f7'/><text y='.9em' font-size='72' x='50%' text-anchor='middle' dominant-baseline='auto' dy='0.1em'>g</text></svg>">
   
+  <!-- Подключение шрифта Geist как на rooni.dev -->
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -266,11 +267,17 @@
     .lastfm-status.playing .status-dot { background: #22c55e; box-shadow: 0 0 8px #22c55e; animation: pulse-dot 2.5s infinite ease-in-out; }
     .lastfm-track {
       font-size: 16px; font-weight: 700; margin-bottom: 2px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.35;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .lastfm-artist {
       font-size: 13px; color: var(--text-muted);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.45;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .lastfm-eq { display: none; align-items: flex-end; gap: 3px; height: 14px; margin-top: 8px; }
     .lastfm-status.playing ~ .lastfm-eq,
@@ -384,6 +391,8 @@
     .about-box { background: var(--card-bg); border: 1px solid var(--card-border); padding: 35px; border-radius: 22px; }
     .about-box p { font-size: 13.5px; color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; }
     .about-box p:last-child { margin-bottom: 0; }
+
+    /* ---------- comments ---------- */
     .comments-wrap { display: flex; flex-direction: column; gap: 18px; max-height: 62vh; }
     .comment-form {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
@@ -876,6 +885,8 @@
       contents.forEach((c, i)   => c.classList.toggle('visible', i === currentIdx));
       setTimeout(() => { isTransitioning = false; }, 1400);
     }
+
+    // индексы секций, у которых внутри есть свой слайдер (для клавиш и свайпа влево/вправо)
     const SLIDER_SECTIONS = { 1: 'socials', 2: 'music', 5: 'about' };
 
     window.addEventListener('wheel', (e) => {
@@ -901,6 +912,7 @@
       }
     }, { passive: true });
 
+    /* ---------- Универсальный слайдер с плавным live-drag (как на rooni.dev) ---------- */
     function createSlider(viewport) {
       const track = viewport.querySelector('.slider-track');
       const dotsWrap = viewport.parentElement.querySelector('.slide-dots');
@@ -934,6 +946,7 @@
         if (!dragging) return;
         dragDelta = getX(e) - startX;
         if (Math.abs(dragDelta) > 8) dragMoved = true;
+        // лёгкое сопротивление на краях, чтобы было видно, что дальше ехать некуда
         let resist = 1;
         if ((current === 0 && dragDelta > 0) || (current === count - 1 && dragDelta < 0)) resist = 0.35;
         track.style.transform = `translateX(${-current * vw + dragDelta * resist}px)`;
@@ -942,6 +955,7 @@
         if (!dragging) return;
         dragging = false;
         viewport.classList.remove('dragging');
+        // если утянули дальше трети экрана — долистываем, иначе плавно возвращаемся назад
         const threshold = vw * 0.18;
         if (Math.abs(dragDelta) > threshold) {
           current = dragDelta < 0 ? Math.min(count - 1, current + 1) : Math.max(0, current - 1);
@@ -957,6 +971,7 @@
       window.addEventListener('mouseup', dragEnd);
       viewport.addEventListener('touchend', dragEnd);
 
+      // не переходить по ссылке, если это был свайп, а не клик
       viewport.querySelectorAll('a').forEach(l => l.addEventListener('click', (e) => { if (dragMoved) e.preventDefault(); }));
       dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
 
@@ -991,6 +1006,7 @@
       avatar.parentElement.addEventListener('mouseleave', () => { avatar.style.transform = 'translate(0,0) scale(1)'; });
     }
 
+    /* ---------- Last.fm интеграция (Now Playing + статистика + топ треков) ---------- */
     const LASTFM_USER    = 'guon220';
     const LASTFM_API_KEY = '967e4c905843c01ffbc836255d9f26af';
 
@@ -1010,6 +1026,9 @@
 
     let lastfmJsonpCounter = 0;
 
+    // Используем JSONP вместо fetch: API Last.fm обычно не отдаёт CORS-заголовки,
+    // из-за чего обычный fetch() блокируется браузером с ошибкой CORS.
+    // JSONP (загрузка через <script>) этому ограничению не подчиняется.
     function lastfmRequest(params) {
       return new Promise((resolve, reject) => {
         const cbName = `lastfmCb_${Date.now()}_${lastfmJsonpCounter++}`;
@@ -1141,6 +1160,7 @@
     loadLastFmAll();
     setInterval(loadLastFmNowPlaying, 30000);
 
+    /* ---------- comments via Supabase ---------- */
     const SUPABASE_URL = 'https://eyohdmwrmmkxturvbduk.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5b2hkbXdybW1reHR1cnZiZHVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2ODg5ODAsImV4cCI6MjA5ODI2NDk4MH0.4GeuC79Z-hU8DZC-7tyzBhF2UZStLRSrbXShOOIrydY';
     const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
@@ -1206,6 +1226,7 @@
         commentSubmit.disabled = true;
         commentHint.textContent = currentLang === 'ru' ? 'отправка…' : 'sending…';
 
+        // ИСПРАВЛЕНИЕ: Если имя пустое, передаем "Анон" или "Anonymous"
         const userName = commentName.value.trim() || (currentLang === 'ru' ? 'Анон' : 'Anonymous');
 
         const { error } = await sb.from('comments').insert({
@@ -1215,7 +1236,7 @@
 
         if (error) {
           commentHint.textContent = currentLang === 'ru' ? 'ошибка отправки' : 'failed to send';
-          console.error(error); 
+          console.error(error); // Поможет видеть детали ошибки в консоли
         } else {
           commentMsg.value = '';
           commentHint.textContent = '';
